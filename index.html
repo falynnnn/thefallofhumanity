@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Fall of Humanity - A reflection on the descent of modern society into darkness.">
+  <meta name="theme-color" content="#000000">
+  <title>The Fall of Humanity</title>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css" as="style">
+  <link rel="preload" href="https://i.pinimg.com/736x/d4/a5/ee/d4a5eefd0482ec978b5c048a1e61d329.jpg" as="image">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      cursor: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #000;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    .custom-cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.3);
+      mix-blend-mode: difference;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: width 0.2s, height 0.2s, transform 0.1s ease;
+    }
+
+    .custom-cursor.hover {
+      transform: translate(-50%, -50%) scale(1.5);
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .cursor-trail {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.15);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* Loading Animation */
+    .loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 1s ease-out;
+    }
+
+    .loader {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loader:after {
+      content: '';
+      position: absolute;
+      width: 40%;
+      height: 100%;
+      background: #fff;
+      animation: loading 1.5s infinite ease-in-out;
+      will-change: transform;
+    }
+
+    @keyframes loading {
+      0% { left: -40%; }
+      100% { left: 100%; }
+    }
+
+    .loader-text {
+      position: absolute;
+      bottom: 45%;
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 2s ease-in forwards, fadeOut 2s ease-out 3s forwards;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 0.7; }
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 0.7; }
+      100% { opacity: 0; }
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .title {
+      font-size: clamp(3rem, 6vw, 6rem); /* Increased minimum size for mobile */
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      mix-blend-mode: difference;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      font-weight: 300;
+      opacity: 0.7;
+      margin-bottom: 40px;
+      text-align: center;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out forwards;
+      animation-delay: 4.5s;
+      opacity: 0;
+      line-height: 1.9;
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+      z-index: 2;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 0.7; transform: translateY(0); }
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      animation: fadeIn 1s ease-out forwards;
+      animation-delay: 5s;
+      z-index: 2;
+      transition: transform 0.3s ease;
+    }
+
+    .scroll-indicator:hover {
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    .scroll-indicator span {
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .scroll-icon {
+      width: 30px;
+      height: 50px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      position: relative;
+    }
+
+    .scroll-icon:after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scrollAnimation 2s infinite;
+      will-change: transform, opacity;
+    }
+
+    @keyframes scrollAnimation {
+      0% { top: 10px; opacity: 1; transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.2); }
+      100% { top: 30px; opacity: 0; transform: translateX(-50%) scale(1); }
+    }
+
+    /* Cracked Wasteland Section */
+    .wasteland-scene {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('https://i.pinimg.com/736x/8f/cd/9e/8fcd9eb52dc6a1e4e0c472f84029a46e.jpg') no-repeat center center;
+      background-size: cover;
+      overflow: hidden;
+      padding: 60px 5%;
+      transition: opacity 0.5s ease;
+    }
+
+    .wasteland-scene::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #1a1a1a, #000);
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    .scene-text {
+      position: relative;
+      text-align: center;
+      z-index: 10;
+      width: 80%;
+      max-width: 700px;
+    }
+
+    .scene-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 40px;
+      background: linear-gradient(45deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .scene-title.active {
+      animation: pulseShadow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseShadow {
+      0% { text-shadow: 0 0 2px rgba(255, 255, 255, 0.1); }
+      50% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+      100% { text-shadow: 0 0 2px rgba(255, 255, 255, 0.1); }
+    }
+
+    .scene-text p {
+      font-size: 1.2rem;
+      line-height: 1.9;
+      margin-bottom: 30px;
+      position: relative;
+      padding-left: 20px;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .highlighted-text {
+      font-size: 1.8rem;
+      font-weight: 300;
+      line-height: 1.5;
+      margin: 50px 0;
+      text-align: center;
+      position: relative;
+      opacity: 0.9;
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .highlighted-text:hover {
+      transform: scale(1.02);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    .highlighted-text::before,
+    .highlighted-text::after {
+      content: '"';
+      font-size: 4rem;
+      position: absolute;
+      opacity: 0.2;
+    }
+
+    .highlighted-text::before {
+      top: -20px;
+      left: -20px;
+    }
+
+    .highlighted-text::after {
+      bottom: -60px;
+      right: -20px;
+    }
+
+    /* Manifesto Section */
+    .manifesto {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 120px 5%;
+      background: linear-gradient(to bottom, #000, #111, #000);
+      overflow: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    .manifesto .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.pinimg.com/736x/24/2d/cd/242dcd20246fa2084df41fa90c2d09b4.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.1;
+      z-index: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .manifesto:hover .background-image {
+      transform: scale(1.05);
+      opacity: 0.15;
+    }
+
+    .manifesto-container {
+      max-width: 700px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .manifesto-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .manifesto-title .static-text {
+      background: linear-gradient(45deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .manifesto-title .glitch-text {
+      display: inline-block;
+      color: #ddd;
+      letter-spacing: 2px;
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+    }
+
+    .manifesto-title .glitch-text span {
+      display: inline-block;
+      margin: 0 2px;
+    }
+
+    .manifesto-title::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      background: #fff;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .manifesto-text {
+      font-size: 1.2rem;
+      line-height: 1.9;
+      margin-bottom: 30px;
+      position: relative;
+      padding-left: 20px;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .manifesto-highlight {
+      font-size: 1.8rem;
+      font-weight: 300;
+      line-height: 1.5;
+      margin: 50px 0;
+      text-align: center;
+      position: relative;
+      opacity: 0.9;
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .manifesto-highlight:hover {
+      transform: scale(1.02);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    .manifesto-highlight::before,
+    .manifesto-highlight::after {
+      content: '"';
+      font-size: 4rem;
+      position: absolute;
+      opacity: 0.2;
+    }
+
+    .manifesto-highlight::before {
+      top: -20px;
+      left: -20px;
+    }
+
+    .manifesto-highlight::after {
+      bottom: -60px;
+      right: -20px;
+    }
+
+    /* Corruption Section */
+    .corruption {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 120px 5%;
+      background-color: #000;
+      overflow: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    .corruption::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, transparent, #000);
+      z-index: 1;
+    }
+
+    .corruption-container {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .corruption-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+    }
+
+    .corruption-text {
+      font-size: 1.2rem;
+      line-height: 1.9;
+      margin-bottom: 30px;
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .corruption-highlight {
+      font-size: 1.2rem;
+      line-height: 1.9;
+      margin-bottom: 30px;
+      position: relative;
+      padding-left: 20px;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .blink-text {
+      animation: blinkText 3s infinite;
+    }
+
+    @keyframes blinkText {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .distorted-container {
+      position: relative;
+      width: 100%;
+      height: clamp(200px, 30vh, 300px);
+      margin: 50px 0;
+      overflow: hidden;
+    }
+
+    .distorted-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(150%) brightness(50%);
+      animation: distort 8s infinite alternate;
+      will-change: transform;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .distorted-image:hover {
+      filter: grayscale(100%) contrast(200%) brightness(60%);
+      transform: scale(1.02);
+    }
+
+    @keyframes distort {
+      0% { transform: scale(1.05) skew(0deg, 0deg); }
+      25% { transform: scale(1.1) skew(1deg, 0deg); }
+      50% { transform: scale(1.05) skew(0deg, 1deg); }
+      75% { transform: scale(1.1) skew(-1deg, 0deg); }
+      100% { transform: scale(1.05) skew(0deg, -1deg); }
+    }
+
+    .distorted-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: flickerOverlay 5s infinite;
+    }
+
+    @keyframes flickerOverlay {
+      0%, 100% { opacity: 0.5; }
+      10%, 30%, 50%, 70% { opacity: 0.45; }
+      20%, 40%, 60% { opacity: 0.55; }
+    }
+
+    .distorted-text {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+      mix-blend-mode: screen;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .distorted-text:hover {
+      color: rgba(255, 255, 255, 1);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 60px 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+    }
+
+    .credits {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.6);
+      position: relative;
+      display: inline-block;
+      padding: 10px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .credits::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: -1;
+    }
+
+    .credits:hover {
+      color: #fff;
+    }
+
+    .credits:hover::before {
+      transform: translateX(0);
+    }
+
+    .credits::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 30px;
+      animation: borderDraw 1s paused;
+      opacity: 0;
+    }
+
+    .credits:hover::after {
+      animation: borderDraw 1s forwards;
+      opacity: 1;
+    }
+
+    @keyframes borderDraw {
+      0% { clip-path: inset(0 100% 0 0); }
+      25% { clip-path: inset(0 0 0 0); }
+      50% { clip-path: inset(100% 0 0 0); }
+      75% { clip-path: inset(0 0 100% 0); }
+      100% { clip-path: inset(0 100% 0 0); }
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .hero { height: 100vh; } /* Full screen on mobile */
+      .wasteland-scene, .manifesto, .corruption { min-height: 80vh; padding: 40px 5%; }
+      .title { font-size: clamp(3rem, 12vw, 6rem); } /* Larger title on mobile */
+      .subtitle { font-size: 1.1rem; } /* Slight increase for mobile */
+      .scene-title, .manifesto-title, .corruption-title { font-size: 2rem; }
+      .scene-text p, .manifesto-text, .corruption-text { font-size: 1rem; }
+      .highlighted-text, .manifesto-highlight { font-size: 1.5rem; margin: 40px 0; }
+      .corruption-highlight { font-size: 1rem; }
+      .distorted-text { font-size: 2rem; }
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: clamp(3rem, 12vw, 6rem); }
+      .subtitle { font-size: 1rem; } /* Adjusted to fit full-screen */
+      .scene-text p, .manifesto-text, .corruption-text { font-size: 0.9rem; }
+      .highlighted-text, .manifesto-highlight { font-size: 1.2rem; margin: 30px 0; }
+      .corruption-highlight { font-size: 0.9rem; }
+      .distorted-text { font-size: 1.5rem; }
+    }
+
+    .inview-fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+
+    .inview-fade-up.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section, article {
+      opacity: 0.8;
+    }
+
+    section.active, article.active {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="custom-cursor"></div>
+
+  <!-- Loading Animation -->
+  <div class="loader-wrapper" role="alert" aria-label="Loading">
+    <div class="loader"></div>
+    <div class="loader-text">ENTERING THE VOID</div>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1 class="title">THE FALL OF HUMANITY</h1>
+      <p class="subtitle">The descent into darkness has already begun</p>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-icon"></div>
+      </div>
+    </section>
+
+    <!-- Cracked Wasteland Section -->
+    <section class="wasteland-scene">
+      <div class="scene-text">
+        <h2 class="scene-title inview-fade-up">The Corruption</h2>
+        <p class="inview-fade-up">
+          The world around us is slowly falling apart, and we don’t even notice. The darkness has already taken hold, creeping into everything we touch. What we fear isn't coming—it’s already here, hiding in plain sight.
+        </p>
+        <p class="highlighted-text inview-fade-up">
+          The corruption that plagues us is a mirror of our own souls.
+        </p>
+        <p class="inview-fade-up">
+          The ground beneath us cracks not from natural decay, but from the weight of our own indifference. Society has become a wasteland, its foundations weakened by the erosion of trust, honor, and compassion, buried beneath the debris of greed and self-obsession.
+        </p>
+        <p class="inview-fade-up">
+          The world trembles under the weight of our choices, as the cracks in our foundation grow deeper. We have let greed, fear, and apathy shape us, and now we are left with a hollow future. The corruption doesn’t shout; it whispers, quietly twisting our hearts until we no longer recognize what we’ve become.
+        </p>
+      </div>
+    </section>
+
+    <!-- Manifesto Section -->
+    <article class="manifesto">
+      <div class="background-image"></div>
+      <div class="manifesto-container">
+        <h2 class="manifesto-title inview-fade-up">
+          <span class="static-text">The Whispers of </span>
+          <span class="glitch-text" data-text="EVIL">
+            <span>E</span><span>V</span><span>I</span><span>L</span>
+          </span>
+        </h2>
+        <p class="manifesto-text inview-fade-up">
+          In the silent moments between thoughts darkness creeps in. The modern world has offered us convenience at the cost of our souls. We've traded connection for isolation, wisdom for information, truth for comfort.
+        </p>
+        <p class="manifesto-highlight inview-fade-up">
+          The corruption is not external—it lives within us, nurtured by our choices, fed by our indifference.
+        </p>
+        <p class="manifesto-text inview-fade-up">
+          Each day we drift further from our essence, willingly surrendering to the whispers that promise fulfillment through consumption, status, and the illusion of control. These are not innocent vices but the tools of our <span class="blink-text">undoing</span>.
+        </p>
+        <p class="manifesto-text inview-fade-up">
+          Always keep God in your heart and thoughts, guiding you through every moment.
+        </p>
+      </div>
+    </article>
+
+    <!-- Corruption Section -->
+    <article class="corruption">
+      <div class="corruption-container">
+        <h2 class="corruption-title inview-fade-up">The Satanic Influence</h2>
+        <p class="corruption-text inview-fade-up">
+          What we once recognized as evil now parades as progress. The corruption of our minds was not accomplished through force but through subtle manipulation of our desires. Evil doesn't announce itself—it disguises itself as choice.
+        </p>
+        <div class="distorted-container inview-fade-up">
+          <img src="https://i.pinimg.com/736x/d4/a5/ee/d4a5eefd0482ec978b5c048a1e61d329.jpg" alt="Distorted humanity" class="distorted-image" loading="lazy">
+          <div class="distorted-overlay">
+            <div class="distorted-text">CORRUPTED</div>
+          </div>
+        </div>
+        <p class="corruption-highlight inview-fade-up">
+          Satan's greatest victory was deceiving humanity into believing we are inherently good, when in truth, we are always walking the fine line between redemption and destruction.
+        </p>
+        <p class="corruption-text inview-fade-up">
+          The digital age has accelerated our descent. We're more connected yet more isolated, more informed yet more confused, more "free" yet more enslaved to our impulses. Our minds have become battlegrounds, and most have already surrendered without recognizing the war.
+        </p>
+        <p class="corruption-text inview-fade-up">
+          Look around. The evidence is everywhere—the erosion of empathy, the glorification of greed, the normalization of narcissism. These are not random cultural shifts but symptoms of a deeper spiritual corruption that has infiltrated our collective consciousness.
+        </p>
+        <p class="corruption-highlight inview-fade-up">
+          Humanity’s fall didn’t happen in a single moment, but over countless choices—small and large—leading us further from the light. We sought power, ignored truth, and embraced darkness, until we no longer recognized ourselves.
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer inview-fade-up">
+    <a href="https://www.instagram.com/anas.7p" target="_blank" class="credits" tabindex="0">
+      Instagram @anas.7p
+    </a>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">↑</button>
+
+  <script>
+    // Custom cursor
+    const cursor = document.createElement('div');
+    cursor.classList.add('custom-cursor');
+    document.body.appendChild(cursor);
+
+    const trailCount = 5;
+    const trail = [];
+    for (let i = 0; i < trailCount; i++) {
+      const trailDot = document.createElement('div');
+      trailDot.classList.add('cursor-trail');
+      document.body.appendChild(trailDot);
+      trail.push(trailDot);
+    }
+
+    let mouseX = 0;
+    let mouseY = 0;
+    const trailPositions = Array(trailCount).fill().map(() => ({x: 0, y: 0}));
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = `${mouseX}px`;
+      cursor.style.top = `${mouseY}px`;
+    });
+
+    const interactiveElements = document.querySelectorAll('a, button, .credits');
+    interactiveElements.forEach(element => {
+      element.addEventListener('mouseenter', () => {
+        cursor.classList.add('hover');
+      });
+      element.addEventListener('mouseleave', () => {
+        cursor.classList.remove('hover');
+      });
+    });
+
+    // Loading animation
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.querySelector('.loader-wrapper').style.opacity = 0;
+        setTimeout(() => {
+          document.querySelector('.loader-wrapper').style.display = 'none';
+        }, 1000);
+      }, 3000);
+    });
+
+    // Scroll animation with section transitions
+    const observerOptions = {
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          if (entry.target.classList.contains('wasteland-scene')) {
+            document.querySelector('.scene-title').classList.add('active');
+          }
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.inview-fade-up, section, article').forEach(element => {
+      observer.observe(element);
+    });
+
+    // Trail animation
+    function animateTrail() {
+      trailPositions[0].x += (mouseX - trailPositions[0].x) * 0.3;
+      trailPositions[0].y += (mouseY - trailPositions[0].y) * 0.3;
+      for (let i = trailCount - 1; i > 0; i--) {
+        trailPositions[i].x = trailPositions[i-1].x;
+        trailPositions[i].y = trailPositions[i-1].y;
+      }
+      for (let i = 0; i < trailCount; i++) {
+        trail[i].style.left = `${trailPositions[i].x}px`;
+        trail[i].style.top = `${trailPositions[i].y}px`;
+        trail[i].style.opacity = 1 - (i / trailCount);
+        trail[i].style.transform = `translate(-50%, -50%) scale(${1 - (i / trailCount) * 0.6})`;
+      }
+      requestAnimationFrame(animateTrail);
+    }
+    animateTrail();
+
+    // Glitchy "EVIL" Animation
+    const glitchText = document.querySelector('.glitch-text');
+    const letters = glitchText.querySelectorAll('span');
+    const finalText = glitchText.getAttribute('data-text').split('');
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    function glitchLetter(letter, index) {
+      const targetChar = finalText[index];
+      let currentIndex = 0;
+
+      letter.textContent = 'A';
+      letter.style.opacity = '1';
+
+      const glitchInterval = setInterval(() => {
+        letter.textContent = alphabet[currentIndex];
+        letter.style.transform = `skew(${Math.random() * 10 - 5}deg)`;
+
+        currentIndex++;
+        if (alphabet[currentIndex] === targetChar) {
+          clearInterval(glitchInterval);
+          letter.textContent = targetChar;
+          letter.style.transform = 'skew(0deg)';
+          letter.style.opacity = '1';
+
+          setInterval(() => {
+            letter.style.opacity = Math.random() * 0.2 + 0.8;
+          }, 200);
+        }
+      }, 50);
+    }
+
+    const manifestoTitle = document.querySelector('.manifesto-title');
+    const glitchObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          letters.forEach((letter, index) => {
+            setTimeout(() => glitchLetter(letter, index), index * 500);
+          });
+          glitchObserver.unobserve(manifestoTitle);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    glitchObserver.observe(manifestoTitle);
+
+    // Back to Top Button Functionality
+    const backToTop = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
